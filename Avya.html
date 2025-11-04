@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Divya — Avya</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+font-family: 'Poppins', sans-serif;
+color: #333;
+overflow-x: hidden;
+line-height: 1.5;
+scroll-behavior: smooth;
+transition: background 1s;
+background: linear-gradient(to bottom, #ffe6f0, #fff0f5);
+touch-action: none;
+}
+
+section {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+text-align: center;
+padding: 2rem;
+opacity: 0;
+transform: translateY(50px);
+transition: all 0.8s ease;
+position: relative;
+}
+
+section.visible { opacity: 1; transform: translateY(0); }
+
+h1, h2, p { margin-bottom: 1rem; }
+h1 { font-size: 2.5rem; color: #ff4a66; }
+h2 { font-size: 2rem; color: #ff6b81; }
+p { font-size: 1.2rem; max-width: 90%; line-height: 1.6; display: inline-block; }
+
+.typed-heart { display: inline-block; animation: popHeart 0.5s ease forwards; opacity: 0; font-size: 1.2rem; margin-left: 2px; }
+@keyframes popHeart { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+
+/* Floating Emoji/Heart */
+.emoji { position: absolute; font-size: 1.5rem; pointer-events: none; animation: floatUp 2s linear forwards; }
+@keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-150px) scale(1.5); opacity: 0; } }
+
+.confetti { position: absolute; font-size: 1.5rem; pointer-events: none; animation: fall 3s linear forwards; }
+@keyframes fall { 0% { transform: translateY(-50px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
+
+/* CTA Button */
+.cta-button {
+margin-top: 1.5rem;
+padding: 0.8rem 1.5rem;
+background: #ff4a66;
+border: none;
+border-radius: 25px;
+color: #fff;
+font-size: 1rem;
+cursor: pointer;
+transition: background 0.3s, transform 0.3s;
+position: relative;
+}
+.cta-button:hover { background: #ff1f4d; }
+.cta-pulse { animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+footer { text-align: center; padding: 1rem; font-size: 0.9rem; color: #555; }
+
+@media(max-width:600px){
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+p { font-size: 1rem; }
+.emoji, .confetti { font-size: 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Slide 1 -->
+<section class="visible">
+<h1>Divya — Almost 3 Years Together ❤️</h1>
+<p class="typed" data-text="It was just a misunderstanding — I was only trying to be cool. That was my fault."></p>
+</section>
+
+<!-- Slide 2 -->
+<section>
+<p class="typed" data-text="I promise I will not do anything like that again. Please trust me once more."></p>
+</section>
+
+<!-- Slide 3 -->
+<section>
+<p class="typed" data-text="Avya — a small name for a big promise: to mix our hearts, care, and respect."></p>
+</section>
+
+<!-- Slide 4: CTA -->
+<section id="cta">
+<p class="typed" data-text="Can we please talk? Let me show you I can change and be the person you deserve. — Om ❤️"></p>
+<button id="ctaButton" class="cta-button" onclick="window.location.href='tel:+YOUR_PHONE_NUMBER'">Talk now</button>
+</section>
+
+<footer>Made with love for Divya — Avya</footer>
+
+<script>
+// Scroll-triggered reveal for sections
+const sections = document.querySelectorAll('section');
+const revealOnScroll = () => {
+const windowHeight = window.innerHeight;
+sections.forEach(section => {
+const top = section.getBoundingClientRect().top;
+if(top < windowHeight - 100){ section.classList.add('visible'); }
+});
+}
+window.addEventListener('scroll', revealOnScroll);
+revealOnScroll();
+
+
+// Floating emoji trail following finger/tap
+const trailEmojis = ['💖','😍','😘','🥰','🌟','💌'];
+let isTouching = false;
+
+const createTrailEmoji = (x, y) => {
+const span = document.createElement('span');
+span.className = 'emoji';
+span.textContent = trailEmojis[Math.floor(Math.random()*trailEmojis.length)];
+span.style.left = x + 'px';
+span.style.top = y + 'px';
+span.style.animationDuration = (1.5 + Math.random()) + 's';
+document.body.appendChild(span);
+setTimeout(() => { span.remove(); }, 2000);
+}
+
+document.body.addEventListener('mousemove', (e) => { if(isTouching) createTrailEmoji(e.clientX, e.clientY); });
+document.body.addEventListener('touchmove', (e) => { isTouching = true; const touch = e.touches[0]; createTrailEmoji(touch.clientX, touch.clientY); });
+document.body.addEventListener('touchend', () => { isTouching = false; });
+document.body.addEventListener('mousedown', () => { isTouching = true; });
+document.body.addEventListener('mouseup', () => { isTouching = false; });
+
+// Confetti effect for CTA slide
+const cta = document.getElementById('cta');
+const ctaButton = document.getElementById('ctaButton');
+const confettiEmojis = ['💖','🌟','💌','😍','✨'];
+const launchConfetti = () => {
+for(let i=0;i<20;i++){
+const span = document.createElement('span');
+span.className = 'confetti';
+span.textContent = confettiEmojis[Math.floor(Math.random()*confettiEmojis.length)];
+span.style.left = Math.random()*100 + 'vw';
+span.style.animationDuration = (2 + Math.random()*2) + 's';
+cta.appendChild(span);
+setTimeout(() => { span.remove(); }, 3000);
+}
+}
+
+// Intersection Observer for CTA effects
+const observer = new IntersectionObserver(entries => {
+entries.forEach(entry => {
+if(entry.isIntersecting){
+launchConfetti();
+ctaButton.classList.add('cta-pulse');
+setInterval(() => {
+const span = document.createElement('span');
+span.className = 'emoji';
+span.textContent = confettiEmojis[Math.floor(Math.random()*confettiEmojis.length)];
+const rect = ctaButton.getBoundingClientRect();
+span.style.left = (rect.left + rect.width/2 + (Math.random()*40-20)) + 'px';
+span.style.top = (rect.top + (Math.random()*-20)) + 'px';
+span.style.animationDuration = (2 + Math.random()) + 's';
+document.body.appendChild(span);
+setTimeout(() => { span.remove(); }, 2500);
+}, 400);
+}
+});
+}, { threshold: 0.5 });
+observer.observe(cta);
+
+// Scroll-based background gradient
+const gradients = [
+'linear-gradient(to bottom, #ffe6f0, #fff0f5)',
+'linear-gradient(to bottom, #fff0f5, #ffe6e6)',
+'linear-gradient(to bottom, #ffe6f0, #ffd6e6)',
+'linear-gradient(to bottom, #ffe6ff, #ffd6f0)',
+'linear-gradient(to bottom, #fff0f5, #ffe6f0)'
+];
+window.addEventListener('scroll', () => {
+const scrollTop = window.scrollY;
+const docHeight = document.body.scrollHeight - window.innerHeight;
+const index = Math.floor((scrollTop / docHeight) * gradients.length);
+document.body.style.background = gradients[Math.min(index, gradients.length-1)];
+});
+
+// Typing animation with hearts
+const typedParagraphs = document.querySelectorAll('.typed');
+typedParagraphs.forEach(p => {
+const text = p.getAttribute('data-text');
+p.textContent = '';
+let i = 0;
+const type = () => {
+if(i < text.length){
+p.textContent += text.charAt(i);
+if(text.charAt(i) !== ' ' && Math.random() < 0.15){
+const heart = document.createElement('span');
+heart.className = 'typed-heart';
+heart.textContent = '❤️';
+p.appendChild(heart);
+}
+i++;
+setTimeout(type, 50);
+}
+}
+type();
+});
+</script>
+
+</body>
+</html>
+
+
